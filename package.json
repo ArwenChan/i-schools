@@ -1,8 +1,8 @@
 {
   "name": "i-schools",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "backend of ischools",
+  "author": "Arwen Chen",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -11,28 +11,54 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migrations:run": "typeorm migration:run -d ./src/config/cli-data-source.js",
+    "migrations:generate": "typeorm-ts-node-commonjs migration:generate ./src/migrations/update-table -d ./src/config/cli-data-source.ts"
   },
   "dependencies": {
+    "@adminjs/express": "^6.1.0",
+    "@adminjs/nestjs": "^6.1.0",
+    "@adminjs/typeorm": "^5.0.1",
+    "@babel/plugin-syntax-import-assertions": "^7.26.0",
+    "@nestjs/axios": "^3.0.3",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "^2.0.2",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/schedule": "^4.1.0",
+    "@nestjs/typeorm": "^10.0.0",
+    "adminjs": "^7.8.13",
+    "axios": "^1.7.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "compression": "^1.7.4",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "nest-winston": "^1.9.7",
+    "otplib": "^12.0.1",
+    "pg": "^8.11.3",
+    "qiniu": "^7.13.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.17",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
+    "@swc/cli": "^0.4.0",
+    "@swc/core": "^1.7.10",
     "@types/express": "^4.17.13",
     "@types/jest": "29.5.1",
     "@types/node": "18.16.12",
@@ -50,7 +76,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.2.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.5.3"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -68,5 +94,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": ">= 18"
   }
 }
