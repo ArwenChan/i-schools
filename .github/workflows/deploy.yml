@@ -30,7 +30,7 @@ jobs:
           REGISTRY: ${{secrets.ALIYUN_REGISTRY_URL }}
           NAMESPACE: ${{vars.ACR_NAMESPACE}}
         run: |
-          sed 's/image:/image: "$REGISTRY/$NAMESPACE/i-schools-service:master"/' docker-compose.yml
+          sed -i 's/image:/image: "$REGISTRY/$NAMESPACE/i-schools-service:master"/' docker-compose.yml
 
       - name: Docker meta
         id: meta
