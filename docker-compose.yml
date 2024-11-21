@@ -1,24 +1,24 @@
-version: '3.8'
 services:
   nest-app:
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
+    container_name: i-schools-nest
+    image: 'crpi-gfdpa60bbkbyh8ii.cn-shanghai.personal.cr.aliyuncs.com/i-schools/nest-backend:master'
     depends_on:
       - postgres
     ports:
-      - 8000:8000
+      - 8000:3000
     restart: always
     volumes:
       - /usr/local/etc/logs:/app/logs
 
   postgres:
+    container_name: i-schools-postgresdb
     image: postgres:13-alpine
     restart: always
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_DB: ${DATABASE_NAME}
+    env_file: '.env'
     ports:
       - 5432:5432
     volumes:

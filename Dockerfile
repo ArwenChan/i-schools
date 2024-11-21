@@ -1,7 +1,8 @@
 FROM node:18-slim as base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN npm config set -g registry https://registry.npmmirror.com
+RUN npm install -g pnpm
 
 FROM base AS build
 COPY . /app
@@ -14,5 +15,5 @@ COPY package.json pnpm-lock.yaml .env /app/
 COPY --from=build /app/dist /app
 WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
-EXPOSE 8000
+EXPOSE 3000
 CMD [ "node", "./src/main.js" ]
