@@ -26,11 +26,8 @@ jobs:
           ENV_FILE: ${{secrets.SERVER_ENV_PROD}}
 
       - name: Set image registry
-        env:
-          REGISTRY: ${{secrets.ALIYUN_REGISTRY_URL }}
-          NAMESPACE: ${{vars.ACR_NAMESPACE}}
         run: |
-          sed -i 's/image:/image: $REGISTRY\/$NAMESPACE\/i-schools-service:master/' docker-compose.yml
+          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/i-schools-service:master/" docker-compose.yml
 
       - name: Docker meta
         id: meta
