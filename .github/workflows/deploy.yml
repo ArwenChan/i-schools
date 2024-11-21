@@ -45,8 +45,8 @@ jobs:
           NAMESPACE: ${{vars.ACR_NAMESPACE}}
           REPO: ${{vars.ACR_REPO}}
         run: |
-          docker build -t $REGISTRY/$NAMESPACE/$REPO:$IMAGE_TAG .
-          docker push $REGISTRY/$NAMESPACE/$REPO:$IMAGE_TAG
+          docker build -t $REGISTRY/$NAMESPACE/$IMAGE_TAG .
+          docker push $REGISTRY/$NAMESPACE/$IMAGE_TAG
 
       - name: Copy docker-compose.yml to Server
         uses: appleboy/scp-action@v0.1.7
