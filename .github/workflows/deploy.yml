@@ -20,10 +20,17 @@ jobs:
 
       - name: Echo secrets
         run: |
-          echo $ENV_FILE >> .env
+          echo -e "$ENV_FILE" > .env
         shell: bash
         env:
           ENV_FILE: ${{secrets.SERVER_ENV_PROD}}
+
+      - name: Set image registry
+        env:
+          REGISTRY: ${{secrets.ALIYUN_REGISTRY_URL }}
+          NAMESPACE: ${{vars.ACR_NAMESPACE}}
+        run: |
+          sed 's/image:/image: "$REGISTRY/$NAMESPACE/i-schools-service:master"/' docker-compose.yml
 
       - name: Docker meta
         id: meta
@@ -43,7 +50,6 @@ jobs:
           IMAGE_TAG: ${{ steps.meta.outputs.tags }}
           REGISTRY: ${{secrets.ALIYUN_REGISTRY_URL }}
           NAMESPACE: ${{vars.ACR_NAMESPACE}}
-          REPO: ${{vars.ACR_REPO}}
         run: |
           docker build -t $REGISTRY/$NAMESPACE/$IMAGE_TAG .
           docker push $REGISTRY/$NAMESPACE/$IMAGE_TAG

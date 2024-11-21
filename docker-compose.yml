@@ -1,7 +1,7 @@
 services:
   nest-app:
     container_name: i-schools-nest
-    image: 'crpi-gfdpa60bbkbyh8ii.cn-shanghai.personal.cr.aliyuncs.com/i-schools/nest-backend:master'
+    image:
     depends_on:
       - postgres
     ports:
