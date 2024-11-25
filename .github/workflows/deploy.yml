@@ -33,16 +33,16 @@ jobs:
 
       - name: Build and push Docker image
         env:
-          IMAGE_TAG: ${{ steps.meta.outputs.tags[0] }}
+          IMAGE_VERSION: ${{ steps.meta.outputs.version }}
           REGISTRY: ${{ secrets.ALIYUN_REGISTRY_URL }}
           NAMESPACE: ${{ vars.ACR_NAMESPACE }}
         run: |
-          docker build -t $REGISTRY/$NAMESPACE/$IMAGE_TAG .
-          docker push $REGISTRY/$NAMESPACE/$IMAGE_TAG
+          docker build -t $REGISTRY/$NAMESPACE/i-schools-service:$IMAGE_VERSION .
+          docker push $REGISTRY/$NAMESPACE/i-schools-service:$IMAGE_VERSION
 
       - name: Set image registry
         run: |
-          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/${{ steps.meta.outputs.tags[0] }}/" docker-compose.yml
+          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/i-schools-service:${{ steps.meta.outputs.version }}/" docker-compose.yml
 
       - name: Copy docker-compose.yml to Server
         uses: appleboy/scp-action@v0.1.7
