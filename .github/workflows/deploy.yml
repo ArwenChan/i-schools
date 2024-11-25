@@ -33,7 +33,7 @@ jobs:
 
       - name: Build and push Docker image
         env:
-          IMAGE_TAG: ${{ steps.meta.outputs.tags }}
+          IMAGE_TAG: ${{ steps.meta.outputs.tags[0] }}
           REGISTRY: ${{ secrets.ALIYUN_REGISTRY_URL }}
           NAMESPACE: ${{ vars.ACR_NAMESPACE }}
         run: |
@@ -42,7 +42,7 @@ jobs:
 
       - name: Set image registry
         run: |
-          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/${{ steps.meta.outputs.tags }}/" docker-compose.yml
+          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/${{ steps.meta.outputs.tags[0] }}/" docker-compose.yml
 
       - name: Copy docker-compose.yml to Server
         uses: appleboy/scp-action@v0.1.7
