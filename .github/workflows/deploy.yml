@@ -1,15 +1,10 @@
-name: Master-And-Deploy
-
-#on:
-#  push:
-#    # 每次 push tag 时进行构建，不需要每次 push 都构建。使用通配符匹配每次 tag 的提交，记得 tag 名一定要以 v 开头
-#    tags:
-#      - v*
+name: Deploy
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - 'master'
+    tags:
+      - v*
 
 jobs:
   push:
@@ -20,14 +15,8 @@ jobs:
 
       - name: Echo secrets
         run: |
-          echo -e "$ENV_FILE" > .env
+          echo -e "${{secrets.SERVER_ENV_PROD}}" > .env
         shell: bash
-        env:
-          ENV_FILE: ${{secrets.SERVER_ENV_PROD}}
-
-      - name: Set image registry
-        run: |
-          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/i-schools-service:master/" docker-compose.yml
 
       - name: Docker meta
         id: meta
@@ -45,11 +34,15 @@ jobs:
       - name: Build and push Docker image
         env:
           IMAGE_TAG: ${{ steps.meta.outputs.tags }}
-          REGISTRY: ${{secrets.ALIYUN_REGISTRY_URL }}
-          NAMESPACE: ${{vars.ACR_NAMESPACE}}
+          REGISTRY: ${{ secrets.ALIYUN_REGISTRY_URL }}
+          NAMESPACE: ${{ vars.ACR_NAMESPACE }}
         run: |
           docker build -t $REGISTRY/$NAMESPACE/$IMAGE_TAG .
           docker push $REGISTRY/$NAMESPACE/$IMAGE_TAG
+
+      - name: Set image registry
+        run: |
+          sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/${{ steps.meta.outputs.tags }}/" docker-compose.yml
 
       - name: Copy docker-compose.yml to Server
         uses: appleboy/scp-action@v0.1.7
@@ -58,7 +51,7 @@ jobs:
           username: ${{ secrets.ALIYUN_USERNAME }}
           password: ${{ secrets.ALIYUN_KEY }}
           source: './docker-compose.yml,./.env'
-          target: '~/workplace/'
+          target: '~/workplace/i-schools-nest/'
           overwrite: true
           strip_components: 1
 

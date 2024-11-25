@@ -8,7 +8,7 @@ services:
       - 8000:3000
     restart: always
     volumes:
-      - /usr/local/etc/logs:/app/logs
+      - ~/workplace/i-schools-nest/logs:/app/logs
 
   postgres:
     container_name: i-schools-postgresdb
