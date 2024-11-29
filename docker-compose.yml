@@ -11,6 +11,7 @@ services:
   nest-app-2:
     container_name: i-schools-nest-2
     image:
+    depends_on:
       - postgres
     restart: always
     volumes:
