@@ -1,14 +1,20 @@
 services:
-  nest-app:
-    container_name: i-schools-nest
+  nest-app-1:
+    container_name: i-schools-nest-1
     image:
     depends_on:
       - postgres
-    ports:
-      - 8000:3000
     restart: always
     volumes:
-      - ~/workplace/i-schools-nest/logs:/app/logs
+      - ~/workplace/i-schools-nest/logs/app1:/app/logs
+
+  nest-app-2:
+    container_name: i-schools-nest-2
+    image:
+      - postgres
+    restart: always
+    volumes:
+      - ~/workplace/i-schools-nest/logs/app2:/app/logs
 
   postgres:
     container_name: i-schools-postgresdb
@@ -23,6 +29,20 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    build: ../nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /www/server/nginx/logs:/var/log/nginx
+      - /ssl/:/etc/nginx/certs/
+    depends_on:
+      - nest-app-1
+      - nest-app-2
 
 volumes:
   pgdata:
