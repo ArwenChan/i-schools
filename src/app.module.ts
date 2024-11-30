@@ -16,9 +16,12 @@ import { HttpModule } from '@nestjs/axios';
 import { checkCode, dynamicImport } from './common/tools';
 // import { AdminModuleOptions } from '@adminjs/nestjs';
 
+const expressSession = require('express-session');
+const pgSession = require('connect-pg-simple')(expressSession);
+
 const authenticate = async (username: string, password: string) => {
   if (username === '18565589052' && checkCode(password)) {
-    return Promise.resolve({});
+    return Promise.resolve({ admin: true });
   }
   return null;
 };
@@ -46,28 +49,38 @@ const authenticate = async (username: string, password: string) => {
     dynamicImport('@adminjs/nestjs').then(({ AdminModule }) =>
       AdminModule.createAdminAsync({
         inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          adminJsOptions: {
-            rootPath: '/admin',
-            resources: AdminResources,
-          },
-          auth: {
-            authenticate,
-            cookieName: 'goooogo',
-            cookiePassword: configService.get('cookieS'),
-          },
-          sessionOptions: {
-            resave: true,
-            saveUninitialized: true,
-            secret: configService.get('cookieS'),
-            cookie: {
-              httpOnly: true,
-              secure: configService.get('environment') === 'production',
-              path: '/admin',
-              maxAge: 3600000,
+        useFactory: (configService: ConfigService) => {
+          const databaseConfig = configService.get('database');
+          const isProd = configService.get('environment') === 'production';
+          return {
+            adminJsOptions: {
+              rootPath: '/admin',
+              resources: AdminResources,
             },
-          },
-        }),
+            auth: {
+              authenticate,
+              cookieName: 'goooogo',
+              cookiePassword: configService.get('cookieS'),
+            },
+            sessionOptions: {
+              store: new pgSession({
+                conString: `postgres://${databaseConfig.username}:${databaseConfig.password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}`,
+                tableName: 'admin_session',
+                createTableIfMissing: true,
+              }),
+              resave: false,
+              saveUninitialized: false,
+              secret: configService.get('cookieS'),
+              proxy: isProd,
+              cookie: {
+                httpOnly: true,
+                secure: isProd,
+                path: '/admin',
+                maxAge: 3600000,
+              },
+            },
+          };
+        },
       }),
     ),
     ScheduleModule.forRoot(),
