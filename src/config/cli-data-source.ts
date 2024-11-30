@@ -7,7 +7,7 @@ export default new DataSource({
   port: +process.env.DATABASE_PORT,
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
-  database: 'postgres',
+  database: process.env.DATABASE_NAME,
   synchronize: false,
   entities: ['src/**/*.entity.{js,ts}'],
   migrations: ['src/migrations/*{.js,.ts}'],

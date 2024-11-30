@@ -5,9 +5,10 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { MyLoggerService } from './logger/logger.service';
 import { dynamicImport } from './common/tools';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
   });
   app.useLogger(app.get(MyLoggerService));
@@ -20,6 +21,7 @@ async function bootstrap() {
   );
   app.use(helmet());
   app.use(compression());
+  app.set('trust proxy', true);
 
   const adminJSModule = await dynamicImport('adminjs');
   const AdminJS = adminJSModule.default;
