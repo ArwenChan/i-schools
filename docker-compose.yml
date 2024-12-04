@@ -5,6 +5,7 @@ services:
     depends_on:
       - postgres
     restart: always
+    env_file: '.env'
     volumes:
       - ~/workplace/i-schools-nest/logs/app1:/app/logs
 
@@ -14,6 +15,7 @@ services:
     depends_on:
       - postgres
     restart: always
+    env_file: '.env'
     volumes:
       - ~/workplace/i-schools-nest/logs/app2:/app/logs
 
