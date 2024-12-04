@@ -8,7 +8,10 @@ import { UsersModule } from './users/users.module';
 import { CommentsModule } from './comments/comments.module';
 import { EventsModule } from './events/events.module';
 import appConfig from './config/app.config';
-import { AdminResources } from './config/admin.config';
+import {
+  getAdminComponentLoader,
+  getAdminResources,
+} from './config/admin.config';
 import { AuthModule } from './auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
@@ -49,13 +52,15 @@ const authenticate = async (username: string, password: string) => {
     dynamicImport('@adminjs/nestjs').then(({ AdminModule }) =>
       AdminModule.createAdminAsync({
         inject: [ConfigService],
-        useFactory: (configService: ConfigService) => {
+        useFactory: async (configService: ConfigService) => {
           const databaseConfig = configService.get('database');
           const isProd = configService.get('environment') === 'production';
+          const componentLoader = await getAdminComponentLoader();
           return {
             adminJsOptions: {
               rootPath: '/admin',
-              resources: AdminResources,
+              componentLoader,
+              resources: getAdminResources(),
             },
             auth: {
               authenticate,

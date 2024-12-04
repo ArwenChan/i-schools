@@ -19,10 +19,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrations:run": "typeorm migration:run -d ./src/config/cli-data-source.js",
+    "migrations:localrun": "typeorm-ts-node-commonjs migration:run -d ./src/config/cli-data-source.ts",
     "migrations:generate": "typeorm-ts-node-commonjs migration:generate ./src/migrations/update-table -d ./src/config/cli-data-source.ts"
   },
   "dependencies": {
     "@adminjs/express": "^6.1.0",
+    "@adminjs/import-export": "^3.0.0",
     "@adminjs/nestjs": "^6.1.0",
     "@adminjs/typeorm": "^5.0.1",
     "@babel/plugin-syntax-import-assertions": "^7.26.0",

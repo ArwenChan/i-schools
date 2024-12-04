@@ -57,11 +57,11 @@ export class School extends BaseEntity {
   })
   stage: SchoolStage;
 
-  @Column('varchar', { array: true, length: 50 })
-  enroll_pattern: string[];
+  @Column('varchar', { length: 150 })
+  enroll_pattern: string;
 
-  @Column('varchar', { nullable: true, array: true, length: 12 })
-  contact: string[];
+  @Column('varchar', { length: 50, nullable: true })
+  contact: string;
 
   @Column({ nullable: true })
   website: string;

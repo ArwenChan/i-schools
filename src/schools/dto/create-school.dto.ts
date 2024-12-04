@@ -19,12 +19,12 @@ export class CreateSchoolDto {
   @IsEnum(SchoolStage)
   readonly stage: SchoolStage;
 
-  @MaxLength(50, { each: true })
-  readonly enroll_pattern: string[];
+  @MaxLength(150)
+  readonly enroll_pattern: string;
 
   @IsOptional()
-  @MaxLength(12, { each: true })
-  readonly contact: string[];
+  @MaxLength(50)
+  readonly contact: string;
 
   @IsOptional()
   @IsUrl()

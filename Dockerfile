@@ -15,5 +15,6 @@ COPY package.json pnpm-lock.yaml /app/
 COPY --from=build /app/dist /app
 WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN npm run migrations:run
 EXPOSE 3000
 CMD [ "node", "./src/main.js" ]
