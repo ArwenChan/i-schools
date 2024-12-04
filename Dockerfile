@@ -11,7 +11,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM base
-COPY package.json pnpm-lock.yaml /app/
+COPY package.json pnpm-lock.yaml .env /app/
 COPY --from=build /app/dist /app
 WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
