@@ -43,7 +43,7 @@ jobs:
       - name: Set image registry
         run: |
           sed -i "4s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/i-schools-service:${{ steps.meta.outputs.version }}/" docker-compose.yml
-          sed -i "14s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/i-schools-service:${{ steps.meta.outputs.version }}/" docker-compose.yml
+          sed -i "12s/image:/image: ${{secrets.ALIYUN_REGISTRY_URL }}\/${{vars.ACR_NAMESPACE}}\/i-schools-service:${{ steps.meta.outputs.version }}/" docker-compose.yml
 
       - name: Copy docker-compose.yml to Server
         uses: appleboy/scp-action@v0.1.7

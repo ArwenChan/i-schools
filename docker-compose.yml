@@ -2,8 +2,6 @@ services:
   nest-app-1:
     container_name: i-schools-nest-1
     image:
-    depends_on:
-      - postgres
     restart: always
     env_file: '.env'
     volumes:
@@ -12,25 +10,10 @@ services:
   nest-app-2:
     container_name: i-schools-nest-2
     image:
-    depends_on:
-      - postgres
     restart: always
     env_file: '.env'
     volumes:
       - ~/workplace/i-schools-nest/logs/app2:/app/logs
-
-  postgres:
-    container_name: i-schools-postgresdb
-    image: postgres:13-alpine
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_DB: ${DATABASE_NAME}
-    ports:
-      - 5432:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
 
   nginx:
     build: ../nginx
@@ -45,6 +28,3 @@ services:
     depends_on:
       - nest-app-1
       - nest-app-2
-
-volumes:
-  pgdata:
