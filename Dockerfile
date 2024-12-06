@@ -16,4 +16,4 @@ COPY --from=build /app/dist /app
 WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 EXPOSE 3000
-CMD ["npm", "run", "start:prod"]
+CMD [ "node", "./src/main.js" ]
