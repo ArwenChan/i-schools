@@ -23,6 +23,22 @@ import { SchoolQueryDto } from './dto/school-query.dto';
 export class SchoolsController {
   constructor(private readonly schoolsService: SchoolsService) {}
 
+  @Get('regions')
+  regions() {
+    return {
+      '440000': {
+        '440100': ['primary'], // 广州
+        '440300': ['primary'], // 深圳
+        '440400': ['primary'], // 珠海
+        '441900': ['primary'], // 东莞
+        '440600': ['primary'], //佛山
+        '442000': ['primary'], //中山
+        '440500': ['primary'], //汕头
+        '440200': ['primary'], //韶关
+      },
+    };
+  }
+
   @Post('multiple')
   @Roles(Role.Admin)
   createMultiple(
