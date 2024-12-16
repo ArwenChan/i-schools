@@ -34,6 +34,9 @@ export class CommentsController {
       schoolId,
       user,
     );
+    if (!comment) {
+      throw new NotFoundException(`user did not comment this school.`);
+    }
     return comment;
   }
 

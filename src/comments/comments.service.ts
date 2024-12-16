@@ -65,9 +65,6 @@ export class CommentsService {
     const comment = await this.commentRepository.findOne({
       where: { author: { id: user.id }, school: { id: schoolId } },
     });
-    if (!comment) {
-      throw new NotFoundException(`user did not comment this school.`);
-    }
     return comment;
   }
 
